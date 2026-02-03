@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Agri AI Chatbot</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .chat-container {
+      width: 400px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: #2e7d32;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .chat-box {
+      padding: 10px;
+      height: 350px;
+      overflow-y: auto;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      margin: 6px 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      max-width: 70%;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    /* USER → RIGHT */
+    .user {
+      background: #dcf8c6;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    /* BOT → LEFT */
+    .bot {
+      background: #eeeeee;
+      align-self: flex-start;
+      text-align: left;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .chat-input button {
+      padding: 10px 15px;
+      border: none;
+      background: #2e7d32;
+      color: white;
+      cursor: pointer;
+    }
+
+    select {
+      margin-top: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="chat-container">
+
+  <div class="chat-header">
+    🌾 Agri AI Chatbot<br>
+    <select id="lang">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+    </select>
+  </div>
+
+  <div id="chatBox" class="chat-box">
+    <div class="message bot">
+      Hello 👋 I am your agriculture assistant. Ask me anything.
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input id="messageInput" placeholder="Type your question..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+</div>
+
+<script>
+  const chatBox = document.getElementById("chatBox");
+
+  function addMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.className = "message " + sender;
+    msg.innerText = text;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById("messageInput");
+    const language = document.getElementById("lang").value;
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    // USER MESSAGE (RIGHT)
+    addMessage(message, "user");
+    input.value = "";
+
+    // BOT TYPING (LEFT)
+    addMessage("⏳ Typing...", "bot");
+
+    try {
+      const res = await fetch(
+        "https://agri-ai-llm-chatbot.onrender.com/api/v1/chat",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message, language })
+        }
+      );
+
+      const data = await res.json();
+
+      chatBox.lastChild.remove(); // remove typing
+      addMessage(data.reply, "bot");
+
+    } catch (err) {
+      chatBox.lastChild.remove();
+      addMessage("❌ Error connecting to chatbot", "bot");
+    }
+  }
+</script>
+
+</body>
+</html>
