@@ -28,6 +28,7 @@
 #
 # Answer:
 # """
+
 def build_prompt(message: str, language: str, history: list) -> str:
     conversation = ""
 
@@ -51,6 +52,18 @@ def build_prompt(message: str, language: str, history: list) -> str:
 - सरल और दोस्ताना भाषा प्रयोग करें
 - सटीक रासायनिक मात्रा न बताएं
 
+उत्तर देने के बाद 3 सुझाव दें।
+
+इस फॉर्मेट में ही उत्तर दें:
+
+ANSWER:
+(क्रमांकित बिंदु)
+
+SUGGESTIONS:
+- सुझाव 1
+- सुझाव 2
+- सुझाव 3
+
 पिछली बातचीत:
 {conversation}
 
@@ -70,6 +83,18 @@ Rules:
 - Each point should be 1–2 sentences
 - Keep the tone friendly and practical
 - Do NOT give exact chemical dosages
+
+After answering, generate 3 follow-up suggestions.
+
+Use EXACTLY this format:
+
+ANSWER:
+<numbered points>
+
+SUGGESTIONS:
+- suggestion 1
+- suggestion 2
+- suggestion 3
 
 Previous conversation:
 {conversation}

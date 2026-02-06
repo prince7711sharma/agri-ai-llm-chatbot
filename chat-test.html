@@ -171,13 +171,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agri AI Assistant</title>
+  <title>Agri Assistant</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
     :root {
-      --primary-color: #43a047; /* Fresh Green */
+      --primary-color: #43a047;
       --primary-dark: #2e7d32;
       --bg-color: #e8f5e9;
       --chat-bg: #ffffff;
@@ -189,8 +190,6 @@
     body {
       font-family: 'Poppins', sans-serif;
       background: var(--bg-color);
-      background-image: radial-gradient(#c8e6c9 1px, transparent 1px);
-      background-size: 20px 20px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -203,15 +202,13 @@
       max-width: 420px;
       background: var(--chat-bg);
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
       height: 85vh;
-      position: relative;
+      overflow: hidden;
     }
 
-    /* HEADER */
     .chat-header {
       background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
       color: white;
@@ -219,46 +216,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
     .header-info h3 {
       margin: 0;
       font-size: 1.2rem;
-      font-weight: 600;
     }
 
     .header-info p {
       margin: 0;
       font-size: 0.8rem;
-      opacity: 0.9;
     }
 
-    .header-controls select {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 0.85rem;
-      outline: none;
-      cursor: pointer;
-    }
-
-    .header-controls select option {
-      color: #333;
-    }
-
-    /* CHAT AREA */
     .chat-box {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
-      background: #fff;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      scroll-behavior: smooth;
+      gap: 12px;
     }
 
     .message {
@@ -266,143 +242,69 @@
       padding: 12px 16px;
       font-size: 0.95rem;
       line-height: 1.5;
-      position: relative;
+      border-radius: 15px;
       word-wrap: break-word;
-      animation: fadeIn 0.3s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Bot Message */
     .bot {
-      align-self: flex-start;
       background: var(--bot-msg-bg);
-      color: var(--text-color);
+      align-self: flex-start;
       border-radius: 0 15px 15px 15px;
     }
 
-    .bot::before {
-      content: '\f4d8'; /* Seedling icon */
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
-      position: absolute;
-      top: -20px;
-      left: 0;
-      color: var(--primary-color);
-      font-size: 14px;
-    }
-
-    /* User Message */
     .user {
-      align-self: flex-end;
       background: var(--user-msg-bg);
+      align-self: flex-end;
       color: #1b5e20;
       border-radius: 15px 0 15px 15px;
     }
 
-    /* FOOTER / INPUT */
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-left: 10px;
+      margin-top: -6px;
+    }
+
+    .suggestion-chip {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .suggestion-chip:hover {
+      background: #c8e6c9;
+    }
+
     .chat-input-area {
       padding: 15px;
       background: #f9f9f9;
       border-top: 1px solid #eee;
       display: flex;
-      align-items: center;
       gap: 10px;
     }
 
-    .input-wrapper {
-      flex: 1;
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
     .chat-input-area input {
-      width: 100%;
-      padding: 12px 45px 12px 15px; /* Space for mic icon */
-      border: 1px solid #ddd;
+      flex: 1;
+      padding: 12px 15px;
       border-radius: 25px;
+      border: 1px solid #ddd;
       outline: none;
-      font-family: 'Poppins', sans-serif;
-      transition: border 0.3s;
     }
 
-    .chat-input-area input:focus {
-      border-color: var(--primary-color);
-    }
-
-    /* Mic Button inside input */
-    .mic-btn {
-      position: absolute;
-      right: 5px;
-      background: none;
-      border: none;
-      color: #777;
-      font-size: 1.1rem;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-      transition: 0.3s;
-    }
-
-    .mic-btn:hover {
-      color: var(--primary-color);
-      background: #eee;
-    }
-
-    .mic-btn.listening {
-      color: #d32f2f;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(211, 47, 47, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
-    }
-
-    /* Send Button */
     .send-btn {
       background: var(--primary-color);
-      color: white;
       border: none;
       width: 45px;
       height: 45px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: transform 0.2s;
-      box-shadow: 0 4px 10px rgba(67, 160, 71, 0.3);
-    }
-
-    .send-btn:hover {
-      background: var(--primary-dark);
-      transform: scale(1.05);
-    }
-
-    /* Volume Toggle */
-    .volume-btn {
-      background: none;
-      border: none;
       color: white;
-      font-size: 1.1rem;
       cursor: pointer;
-      margin-right: 10px;
-    }
-
-    /* Typing Indicator */
-    .typing-indicator {
-      font-size: 12px;
-      color: #888;
-      font-style: italic;
-      margin-left: 5px;
-      display: none;
     }
   </style>
 </head>
@@ -412,223 +314,100 @@
 <div class="chat-card">
 
   <div class="chat-header">
-    <div style="display:flex; align-items:center;">
-      <i class="fa-solid fa-leaf fa-lg" style="margin-right: 10px;"></i>
-      <div class="header-info">
-        <h3>Agri AI</h3>
-        <p>Your Farm Assistant</p>
-      </div>
-    </div>
-    <div class="header-controls">
-      <button id="toggleSound" class="volume-btn" title="Toggle Voice Output">
-        <i class="fa-solid fa-volume-high"></i>
-      </button>
-      <select id="lang">
-        <option value="en">Eng</option>
-        <option value="hi">Hin</option>
-      </select>
+    <div class="header-info">
+      <h3>Agri Assistant</h3>
+      <p>Your Farm Helper 🌾</p>
     </div>
   </div>
 
   <div id="chatBox" class="chat-box">
     <div class="message bot">
-      Hello! I'm your agriculture assistant. Ask me about crops, weather, or farming tips! 🌾
+      Hello 👋 I am <b>Agri Assistant</b>.<br><br>
+      I help farmers with crops, irrigation, fertilizers, diseases, and weather advice 🌱
     </div>
   </div>
 
   <div class="chat-input-area">
-    <div class="input-wrapper">
-      <input id="messageInput" type="text" placeholder="Type or speak..." />
-      <button id="micBtn" class="mic-btn" title="Speak">
-        <i class="fa-solid fa-microphone"></i>
-      </button>
-    </div>
+    <input id="messageInput" type="text" placeholder="Ask something about farming..." />
     <button onclick="sendMessage()" class="send-btn">
       <i class="fa-solid fa-paper-plane"></i>
     </button>
   </div>
+
 </div>
 
 <script>
-  /* --- CONFIGURATION --- */
   const chatBox = document.getElementById("chatBox");
   const messageInput = document.getElementById("messageInput");
-  const micBtn = document.getElementById("micBtn");
-  const soundBtn = document.getElementById("toggleSound");
-  const langSelect = document.getElementById("lang");
 
-  // State
-  let isVoiceEnabled = true;
-  let synth = window.speechSynthesis;
-  let recognition;
-
-  /* --- SETUP SPEECH RECOGNITION (VOICE INPUT) --- */
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    recognition.continuous = false; // Stop after one sentence
-    recognition.interimResults = false;
-
-    // Mic Button Click
-    micBtn.addEventListener('click', () => {
-      if (micBtn.classList.contains('listening')) {
-        recognition.stop();
-      } else {
-        // Set language based on dropdown
-        const selectedLang = langSelect.value;
-        recognition.lang = selectedLang === 'hi' ? 'hi-IN' : 'en-US';
-        recognition.start();
-      }
-    });
-
-    recognition.onstart = () => {
-      micBtn.classList.add('listening');
-      messageInput.placeholder = "Listening...";
-    };
-
-    recognition.onend = () => {
-      micBtn.classList.remove('listening');
-      messageInput.placeholder = "Type or speak...";
-    };
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      messageInput.value = transcript;
-      // Optional: Auto send after speaking
-      // sendMessage();
-    };
-
-    recognition.onerror = (event) => {
-      console.error("Speech Error:", event.error);
-      micBtn.classList.remove('listening');
-      messageInput.placeholder = "Error. Try again.";
-    };
-  } else {
-    micBtn.style.display = 'none'; // Hide mic if not supported
-    console.log("Web Speech API not supported in this browser.");
-  }
-
-  /* --- SETUP SPEECH SYNTHESIS (VOICE OUTPUT) --- */
-
-  // Toggle Sound On/Off
-  soundBtn.addEventListener('click', () => {
-    isVoiceEnabled = !isVoiceEnabled;
-    const icon = soundBtn.querySelector('i');
-    if (isVoiceEnabled) {
-      icon.className = 'fa-solid fa-volume-high';
-    } else {
-      icon.className = 'fa-solid fa-volume-xmark';
-      synth.cancel(); // Stop talking immediately
-    }
-  });
-
-  function speakText(text) {
-    if (!isVoiceEnabled) return;
-    if (synth.speaking) synth.cancel(); // Stop previous speech
-
-    // Clean text (remove markdown like *, #, etc for smoother speech)
-    const cleanText = text.replace(/[*#_]/g, '');
-
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-
-    // Get Voices
-    const voices = synth.getVoices();
-    const selectedLang = langSelect.value;
-
-    // Logic to find a Female Voice
-    // We look for names containing "Female", "Google", "Zira", "Samantha" usually associated with female voices
-    let targetVoice = null;
-
-    if (selectedLang === 'hi') {
-      // Try to find Hindi Voice
-      targetVoice = voices.find(v => v.lang.includes('hi-IN'));
-    }
-
-    if (!targetVoice) {
-      // Fallback to English Female
-      targetVoice = voices.find(v =>
-        (v.name.includes('Female') || v.name.includes('Google US English') || v.name.includes('Zira') || v.name.includes('Samantha'))
-        && v.lang.includes('en')
-      );
-    }
-
-    if (targetVoice) utterance.voice = targetVoice;
-
-    utterance.rate = 1; // Speed
-    utterance.pitch = 1.1; // Slightly higher pitch often sounds more feminine
-
-    synth.speak(utterance);
-  }
-
-  // Ensure voices are loaded (Chrome quirk)
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = synth.getVoices;
-  }
-
-  /* --- CHAT FUNCTIONALITY --- */
-
-  function addMessage(text, sender) {
+  function addMessage(text, sender, suggestions = []) {
     const msg = document.createElement("div");
     msg.className = "message " + sender;
-    // Interpret simple bold markdown if needed, otherwise plain text
-    msg.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+    msg.innerHTML = text.replace(/\n/g, "<br>");
     chatBox.appendChild(msg);
+
+    if (sender === "bot" && suggestions.length > 0) {
+      const sugDiv = document.createElement("div");
+      sugDiv.className = "suggestions";
+
+      suggestions.forEach(s => {
+        const chip = document.createElement("div");
+        chip.className = "suggestion-chip";
+        chip.innerText = s;
+        chip.onclick = () => {
+          messageInput.value = s;
+          sendMessage();
+        };
+        sugDiv.appendChild(chip);
+      });
+
+      chatBox.appendChild(sugDiv);
+    }
+
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
   async function sendMessage() {
-    const input = document.getElementById("messageInput");
-    const language = document.getElementById("lang").value;
-    const message = input.value.trim();
-
+    const message = messageInput.value.trim();
     if (!message) return;
 
-    // 1. Show User Message
     addMessage(message, "user");
-    input.value = "";
+    messageInput.value = "";
 
-    // 2. Show Typing Indicator
-    const typingDiv = document.createElement("div");
-    typingDiv.className = "message bot";
-    typingDiv.style.fontStyle = "italic";
-    typingDiv.innerText = "Thinking... 🌱";
-    chatBox.appendChild(typingDiv);
+    const typing = document.createElement("div");
+    typing.className = "message bot";
+    typing.innerText = "Thinking... 🌱";
+    chatBox.appendChild(typing);
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
-      // 3. Call API
       const res = await fetch(
         "https://agri-ai-llm-chatbot.onrender.com/api/v1/chat",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message, language })
+          body: JSON.stringify({ message })
         }
       );
 
       const data = await res.json();
+      chatBox.removeChild(typing);
 
-      // 4. Remove Typing Indicator & Show Bot Reply
-      chatBox.removeChild(typingDiv);
-
-      const botReply = data.reply || "Sorry, I couldn't understand that.";
-      addMessage(botReply, "bot");
-
-      // 5. Trigger Voice Output
-      speakText(botReply);
+      addMessage(
+        data.reply || "Sorry, I couldn't understand.",
+        "bot",
+        data.suggestions || []
+      );
 
     } catch (err) {
-      chatBox.removeChild(typingDiv);
-      addMessage("❌ Error connecting to server.", "bot");
-      console.error(err);
+      chatBox.removeChild(typing);
+      addMessage("❌ Server error. Please try again.", "bot");
     }
   }
 
-  // Allow "Enter" key to send
-  messageInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") sendMessage();
+  messageInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") sendMessage();
   });
-
 </script>
 
 </body>

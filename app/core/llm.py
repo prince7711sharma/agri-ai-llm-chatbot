@@ -52,6 +52,7 @@
 #
 #     raw = response.choices[0].message.content
 #     return clean_and_number(raw)
+
 import os
 import re
 from dotenv import load_dotenv
@@ -92,7 +93,7 @@ def clean_and_number(text: str) -> str:
     return "\n".join(output).strip()
 
 
-def generate_answer(message: str, language: str, history: list) -> str:
+def generate_answer(message: str, language: str, history: list):
     try:
         history = history[-6:]
         prompt = build_prompt(message, language, history)
@@ -105,7 +106,23 @@ def generate_answer(message: str, language: str, history: list) -> str:
         )
 
         raw = response.choices[0].message.content
-        return clean_and_number(raw)
+
+        answer_text = raw
+        suggestions = []
+
+        if "SUGGESTIONS:" in raw:
+            parts = raw.split("SUGGESTIONS:")
+            answer_text = parts[0].replace("ANSWER:", "").strip()
+
+            suggestions = [
+                s.replace("-", "").strip()
+                for s in parts[1].split("\n")
+                if s.strip()
+            ][:3]
+
+        answer = clean_and_number(answer_text)
+
+        return answer, suggestions
 
     except Exception:
-        return "Sorry, I am facing a technical issue. Please try again."
+        return "Sorry, I am facing a technical issue. Please try again.", []
